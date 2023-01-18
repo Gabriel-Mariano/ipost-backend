@@ -30,7 +30,7 @@ export class UsersService {
 
     const user = new User(userData);
 
-    await this.prismaUser.execute(createUserDto);
+    await this.prismaUser.execute(user);
 
     return user;
   }
