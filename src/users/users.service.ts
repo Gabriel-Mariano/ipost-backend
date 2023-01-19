@@ -35,12 +35,31 @@ export class UsersService {
     return user;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const users = await this.prismaUser.findAll()
+
+    const usersDataFilteredWithoutPassword = users.map((user:User)=> {
+      return {
+        id:user.id,
+        name:user.name,
+        email:user.email,
+        avatar:user.avatar 
+      }
+    })
+    
+    return usersDataFilteredWithoutPassword;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.prismaUser.findById(id);
+
+    if(user) {
+      const { password, ...result } = user;
+
+      return result;
+    }
+
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

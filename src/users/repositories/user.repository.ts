@@ -4,4 +4,6 @@ import { User } from "../entities/user.entity";
 export abstract class UsersRepository {
     abstract execute(createUserDto:CreateUserDto):Promise<User>
     abstract findOne(email:string):Promise<User>;
+    abstract findById(id:string):Promise<User>;
+    abstract findAll():Promise<any>;
 }
