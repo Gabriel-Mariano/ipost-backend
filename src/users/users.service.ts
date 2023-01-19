@@ -62,8 +62,18 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.prismaUser.findById(id);
+
+    if(!user) {
+      throw new HttpException({
+        message: `Usuário com ${id} não foi encontrado`
+      }, HttpStatus.UNAUTHORIZED)
+    }
+
+    const userDataUpdated = await this.prismaUser.updateUser(id, updateUserDto);
+
+    return userDataUpdated;
   }
 
   async remove(id: string) {
