@@ -6,11 +6,11 @@ import { UsersRepository } from "./user.repository";
 
 @Injectable()
 export class UsersPrismaRepository implements UsersRepository {
-    constructor(private prisma:PrismaClient){}
+    constructor(private prisma: PrismaClient) { }
 
-    async execute(createUserDto:CreateUserDto): Promise<User> {
+    async execute(createUserDto: CreateUserDto): Promise<User> {
         const user = await this.prisma.user.create({
-            data:createUserDto,
+            data: createUserDto,
         })
 
         return user;
@@ -18,7 +18,7 @@ export class UsersPrismaRepository implements UsersRepository {
 
     async findOne(email: string): Promise<User> {
         const userFound = await this.prisma.user.findFirst({
-            where:{
+            where: {
                 email,
             }
         })
@@ -28,7 +28,7 @@ export class UsersPrismaRepository implements UsersRepository {
 
     async findById(id: string): Promise<User> {
         const userFoundById = await this.prisma.user.findFirst({
-            where:{
+            where: {
                 id
             }
         })
@@ -41,5 +41,14 @@ export class UsersPrismaRepository implements UsersRepository {
 
         return users;
     }
-    
+
+    async removeUser(id: string): Promise<User> {
+        const user = await this.prisma.user.delete({
+            where: {
+                id
+            }
+        })
+        return user;
+    }
+
 }

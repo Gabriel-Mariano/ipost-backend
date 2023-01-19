@@ -7,15 +7,15 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(private prismaUser:UsersPrismaRepository){}
+  constructor(private prismaUser: UsersPrismaRepository) { }
   async create(createUserDto: CreateUserDto) {
     const { name, email, password } = createUserDto;
-    
+
     const userAlreadyExists = await this.prismaUser.findOne(email);
 
-    if(userAlreadyExists) {
+    if (userAlreadyExists) {
       throw new HttpException({
-        message:'Usuário já existente 😑 .'
+        message: 'Usuário já existente 😑 .'
       }, HttpStatus.FORBIDDEN)
     }
 
@@ -25,7 +25,7 @@ export class UsersService {
     const userData = {
       name,
       email,
-      password:passwordHash
+      password: passwordHash
     }
 
     const user = new User(userData);
@@ -38,22 +38,22 @@ export class UsersService {
   async findAll() {
     const users = await this.prismaUser.findAll()
 
-    const usersDataFilteredWithoutPassword = users.map((user:User)=> {
+    const usersDataFilteredWithoutPassword = users.map((user: User) => {
       return {
-        id:user.id,
-        name:user.name,
-        email:user.email,
-        avatar:user.avatar 
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar
       }
     })
-    
+
     return usersDataFilteredWithoutPassword;
   }
 
   async findOne(id: string) {
     const user = await this.prismaUser.findById(id);
 
-    if(user) {
+    if (user) {
       const { password, ...result } = user;
 
       return result;
@@ -66,7 +66,17 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.prismaUser.findById(id);
+
+    if (!user) {
+      throw new HttpException({
+        message: `Usuário com ${id} não foi encontrado`
+      }, HttpStatus.UNAUTHORIZED)
+    }
+
+    const userRemoved = await this.prismaUser.removeUser(user.id);
+
+    return userRemoved.name;
   }
 }

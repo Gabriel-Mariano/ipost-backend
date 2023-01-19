@@ -6,16 +6,16 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const { id, name, email } = await this.usersService.create(createUserDto);
 
-    return { 
-      id, 
-      name, 
-      email 
+    return {
+      id,
+      name,
+      email
     };
   }
 
@@ -24,7 +24,7 @@ export class UsersController {
   findAll() {
     return this.usersService.findAll();
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -36,8 +36,12 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const username = await this.usersService.remove(id);
+
+    return `O usuário ${username} foi removido com sucesso`;
+
   }
 }
