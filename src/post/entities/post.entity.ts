@@ -6,7 +6,7 @@ export class Post {
 
     title:string;
     content?:string;
-    createdAt?:string;
+    createdAt?:Date;
 
     authorId:string;
 

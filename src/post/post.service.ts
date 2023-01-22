@@ -4,6 +4,7 @@ import { HttpException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
 import { UsersPrismaRepository } from 'src/users/repositories/user.prisma.repository';
 import { CreatePostDto } from './dto/create-post.dto';
+import { FindPostDto } from './dto/find-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
 import { PostsPrismaRepository } from './repositories/post.prisma.repository';
@@ -41,16 +42,46 @@ export class PostService {
     return publication;
   }
 
-  findAll() {
-    return `This action returns all post`;
+  async findAll() {
+    const posts = await this.prismaPost.findAll();
+
+    return posts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findById(id:string) {
+    const post = await this.prismaPost.findById(id);
+
+    return post;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async findOne(findPostDto:FindPostDto) {
+    const posts = await this.prismaPost.findByTitle(findPostDto.title);
+
+    return posts;
+  }
+
+  async update(id: string, updatePostDto: UpdatePostDto, auth:string) {
+    const { authorId } = updatePostDto;
+
+    const postFonded = await this.prismaPost.findById(id);
+    
+    if(!postFonded) {
+      throw new HttpException({
+        message:'Nenhum post encontrado'
+      }, 
+      HttpStatus.FORBIDDEN )}
+
+    const [,token] = auth.split(" ");
+
+    const decode = this.jwt.decode(token);
+    
+    if(authorId !== decode.sub) {
+      throw new HttpException({},HttpStatus.UNAUTHORIZED);
+    }
+
+    const postUpadated = await this.prismaPost.updatePost(id, updatePostDto);
+
+    return postUpadated;
   }
 
   remove(id: number) {

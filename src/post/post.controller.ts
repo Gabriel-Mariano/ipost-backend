@@ -4,6 +4,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Headers } from '@nestjs/common/decorators';
+import { FindPostDto } from './dto/find-post.dto';
 
 @Controller('posts')
 export class PostController {
@@ -15,19 +16,27 @@ export class PostController {
     return this.postService.create(createPostDto, auth)
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.postService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  findById(@Param('id') id:string) {
+    return this.postService.findById(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('title')
+  findOne(@Body() body:FindPostDto) {
+    return this.postService.findOne(body);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  update(@Headers('Authorization') auth:string, @Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return this.postService.update(id, updatePostDto, auth);
   }
 
   @Delete(':id')
