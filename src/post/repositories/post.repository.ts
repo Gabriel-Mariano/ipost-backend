@@ -8,4 +8,5 @@ export abstract class PostsRepository {
     abstract findById(id:string):Promise<Post>;
     abstract findByTitle(title:string):Promise<Post[]>;
     abstract updatePost(id:string,updatePostDto:UpdatePostDto):Promise<Post>;
+    abstract removePost(id:string):Promise<Post>;
 }

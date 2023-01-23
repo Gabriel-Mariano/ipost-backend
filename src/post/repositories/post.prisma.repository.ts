@@ -53,4 +53,14 @@ export class PostsPrismaRepository implements PostsRepository{
 
         return publicationUpdated;
     }
+
+    async removePost(id: string): Promise<Post> {
+        const publicationRemoved = await this.prisma.post.delete({
+            where:{
+                id
+            }
+        })
+
+        return publicationRemoved;
+    }
 }

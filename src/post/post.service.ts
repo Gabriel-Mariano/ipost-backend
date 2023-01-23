@@ -84,7 +84,18 @@ export class PostService {
     return postUpadated;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: string) {
+
+    const postFounded = await this.prismaPost.findById(id);
+
+    if(!postFounded) {
+      throw new HttpException({
+        message:`Nenhum post encontrado com este id: ${id}`
+      }, HttpStatus.UNAUTHORIZED);
+    }
+
+    const postRemoved = await this.prismaPost.removePost(id);
+
+    return postRemoved;
   }
 }
