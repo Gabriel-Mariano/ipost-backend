@@ -16,23 +16,13 @@ export class PostService {
     private prismaPost:PostsPrismaRepository,
     private jwt:JwtService
   ){}
-  async create(createPostDto: CreatePostDto, auth:string) {
+  async create(createPostDto: CreatePostDto) {
     const { authorId } = createPostDto;
 
     const user = await  this.prismaUser.findById(authorId);
 
     if(!user){
       throw new HttpException({}, HttpStatus.UNAUTHORIZED);
-    }
-
-    const [,token] = auth.split(" ");
- 
-    const decode = this.jwt.decode(token);
-
-    if(authorId !== decode.sub) {
-      throw new HttpException({
-        message:'Usuário não autorizado 😑 .' 
-      }, HttpStatus.UNAUTHORIZED);
     }
 
     const publication = new Post(createPostDto);
@@ -60,7 +50,7 @@ export class PostService {
     return posts;
   }
 
-  async update(id: string, updatePostDto: UpdatePostDto, auth:string) {
+  async update(id: string, updatePostDto: UpdatePostDto) {
     const { authorId } = updatePostDto;
 
     const postFonded = await this.prismaPost.findById(id);
@@ -70,14 +60,6 @@ export class PostService {
         message:'Nenhum post encontrado'
       }, 
       HttpStatus.FORBIDDEN )}
-
-    const [,token] = auth.split(" ");
-
-    const decode = this.jwt.decode(token);
-    
-    if(authorId !== decode.sub) {
-      throw new HttpException({},HttpStatus.UNAUTHORIZED);
-    }
 
     const postUpadated = await this.prismaPost.updatePost(id, updatePostDto);
 

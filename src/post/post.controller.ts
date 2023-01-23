@@ -12,8 +12,8 @@ export class PostController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Headers('Authorization') auth: string, @Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto, auth)
+  create(@Body() createPostDto: CreatePostDto) {
+    return this.postService.create(createPostDto)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -35,8 +35,8 @@ export class PostController {
   }
 
   @Patch(':id')
-  update(@Headers('Authorization') auth:string, @Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(id, updatePostDto, auth);
+  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return this.postService.update(id, updatePostDto);
   }
 
   @UseGuards(JwtAuthGuard)

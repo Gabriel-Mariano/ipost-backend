@@ -5,9 +5,10 @@ import { UsersPrismaRepository } from 'src/users/repositories/user.prisma.reposi
 import { PostsPrismaRepository } from './repositories/post.prisma.repository';
 import { PrismaClient } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+import { AuthorizationMiddleware } from './middlewares/post.middleware';
 
 @Module({
   controllers: [PostController],
-  providers: [PostService, PostsPrismaRepository, UsersPrismaRepository, PrismaClient, JwtService]
+  providers: [PostService, PostsPrismaRepository, UsersPrismaRepository, PrismaClient, JwtService, AuthorizationMiddleware]
 })
 export class PostModule {}
