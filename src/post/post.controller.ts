@@ -14,8 +14,10 @@ export class PostController {
   @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  create(@UploadedFile() file:Express.Multer.File, @Body() createPostDto: CreatePostDto, @Query('authorId') authorId:string) {
-    return this.postService.create({...createPostDto, file:file.originalname })
+  create(@UploadedFile() file:Express.Multer.File, @Body() createPostDto: CreatePostDto,@Headers('authorization') auth:string ) {
+    const formatData = {...createPostDto, file:file.originalname };
+    
+    return this.postService.create(formatData, auth)
   }
 
   @UseGuards(JwtAuthGuard)

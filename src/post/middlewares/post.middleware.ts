@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from "express";
 @Injectable()
 export class AuthorizationMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
-        const { body, query } = req;
+        const { body } = req;
         
         const [,token] = req.headers.authorization.split(" ");
 
@@ -13,17 +13,11 @@ export class AuthorizationMiddleware implements NestMiddleware {
 
         const decode = jwt.decode(token);
 
-        if(query.authorId !== decode.sub){
+        if(body.authorId !== decode.sub){
             throw new HttpException({
                 message:'Você não tem permissão para está ação'
             }, HttpStatus.UNAUTHORIZED);
         }
-
-        // if(body.authorId !== decode.sub){
-        //     throw new HttpException({
-        //         message:'Você não tem permissão para está ação'
-        //     }, HttpStatus.UNAUTHORIZED);
-        // }
         
         next()
     }

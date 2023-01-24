@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { HttpException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
+import { validateAuthorization } from 'src/helpers/authorization.validation';
 import { UsersPrismaRepository } from 'src/users/repositories/user.prisma.repository';
 import { CreatePostDto } from './dto/create-post.dto';
 import { FindPostDto } from './dto/find-post.dto';
@@ -16,8 +17,13 @@ export class PostService {
     private prismaPost:PostsPrismaRepository,
     private jwt:JwtService
   ){}
-  async create(createPostDto: CreatePostDto) {
+  async create(createPostDto: CreatePostDto, auth:string) {
     const { authorId } = createPostDto;
+    const isAuthorized = validateAuthorization(createPostDto, auth);
+    
+    if(!isAuthorized) {
+      throw new HttpException({ message: 'não passou'}, HttpStatus.UNAUTHORIZED);
+    } 
     
     const user = await  this.prismaUser.findById(authorId);
 
