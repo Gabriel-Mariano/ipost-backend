@@ -7,6 +7,7 @@ export class Post {
     title:string;
     content?:string;
     createdAt?:Date;
+    file?:string;
 
     authorId:string;
 
@@ -15,6 +16,7 @@ export class Post {
         this.content = props.content;
         this.createdAt = props.createdAt;
         this.authorId = props.authorId;
+        this.file = props.file;
 
         if(!id) {
             this.id = randomUUID();

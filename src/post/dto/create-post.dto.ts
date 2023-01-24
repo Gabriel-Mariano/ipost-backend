@@ -12,4 +12,6 @@ export class CreatePostDto {
 
     @IsString()
     authorId:string;
+
+    file?:any
 }

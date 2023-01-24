@@ -21,6 +21,7 @@ model Post {
   title     String
   content   String?
   createdAt DateTime @default(now()) @db.Timestamp(6)
+  file      String?
   authorId  String
   user      User     @relation(fields: [authorId], references: [id])
 

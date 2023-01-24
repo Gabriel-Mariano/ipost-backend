@@ -18,7 +18,7 @@ export class PostService {
   ){}
   async create(createPostDto: CreatePostDto) {
     const { authorId } = createPostDto;
-
+    
     const user = await  this.prismaUser.findById(authorId);
 
     if(!user){
