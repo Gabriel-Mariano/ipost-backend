@@ -8,6 +8,7 @@ export class AuthorizationMiddleware implements NestMiddleware {
         const { body } = req;
         
         const [,token] = req.headers.authorization.split(" ");
+        // const teste = req.headers.authorid;
 
         const jwt = new JwtService();
 

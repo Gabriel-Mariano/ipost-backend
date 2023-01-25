@@ -13,7 +13,9 @@ model User {
   email    String  @unique
   password String
   avatar   String?
+
   post     Post[]
+  comment  Comment[]
 }
 
 model Post {
@@ -23,7 +25,22 @@ model Post {
   createdAt DateTime @default(now()) @db.Timestamp(6)
   file      String?
   authorId  String
+  
   user      User     @relation(fields: [authorId], references: [id])
+  comment   Comment[]
 
   @@index([authorId], map: "Post_authorId_fkey")
+}
+
+model Comment {
+  id        String   @id @unique
+  comment   String
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+
+  postId    String
+  post      Post   @relation(fields: [postId], references: [id])
+
+  authorId  String
+  user      User    @relation(fields: [authorId], references: [id]) 
+
 }

@@ -7,9 +7,10 @@ import { UsersService } from './users/users.service';
 import { PostModule } from './post/post.module';
 import { AuthorizationMiddleware } from './post/middlewares/post.middleware';
 import { PostController } from './post/post.controller';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, PostModule],
+  imports: [UsersModule, AuthModule, PostModule, CommentsModule],
   controllers: [AppController],
   providers: [AppService],
 })
@@ -19,7 +20,7 @@ export class AppModule implements NestModule {
       .apply(AuthorizationMiddleware)
       .exclude(
         { path:'posts', method: RequestMethod.GET },
-        { path:'posts', method: RequestMethod.POST }
+        // { path:'posts', method: RequestMethod.POST }
       )
       .forRoutes(PostController)
   }
