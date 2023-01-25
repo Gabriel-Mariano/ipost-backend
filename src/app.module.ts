@@ -20,7 +20,6 @@ export class AppModule implements NestModule {
       .apply(AuthorizationMiddleware)
       .exclude(
         { path:'posts', method: RequestMethod.GET },
-        // { path:'posts', method: RequestMethod.POST }
       )
       .forRoutes(PostController)
   }

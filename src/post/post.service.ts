@@ -17,21 +17,16 @@ export class PostService {
     private prismaPost:PostsPrismaRepository,
     private jwt:JwtService
   ){}
-  async create(createPostDto: CreatePostDto, auth:string) {
-    const { authorId } = createPostDto;
-    const isAuthorized = validateAuthorization(createPostDto, auth);
-    
-    if(!isAuthorized) {
-      throw new HttpException({ message: 'não passou'}, HttpStatus.UNAUTHORIZED);
-    } 
-    
+  async create(createPostDto: CreatePostDto, authorId:string) {
     const user = await  this.prismaUser.findById(authorId);
 
     if(!user){
       throw new HttpException({}, HttpStatus.UNAUTHORIZED);
     }
 
-    const publication = new Post(createPostDto);
+    const payload = {...createPostDto, authorId:authorId }
+
+    const publication = new Post(payload);
 
     await this.prismaPost.execute(publication);
 
@@ -57,8 +52,6 @@ export class PostService {
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
-    const { authorId } = updatePostDto;
-
     const postFonded = await this.prismaPost.findById(id);
     
     if(!postFonded) {

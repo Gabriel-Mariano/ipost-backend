@@ -10,8 +10,8 @@ export class CreatePostDto {
     @IsString()
     content?:string;
 
-    @IsString()
-    authorId:string;
+    // @IsString()
+    // authorId?:string;
 
     file?:any
 }

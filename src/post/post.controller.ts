@@ -14,10 +14,14 @@ export class PostController {
   @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  create(@UploadedFile() file:Express.Multer.File, @Body() createPostDto: CreatePostDto,@Headers('authorization') auth:string ) {
-    const formatData = {...createPostDto, file:file.originalname };
-    
-    return this.postService.create(formatData, auth)
+  create(
+    @UploadedFile() file:Express.Multer.File, 
+    @Headers('authorid') authorId:string,
+    @Body() createPostDto: CreatePostDto,
+  ) {
+    const formatData = {...createPostDto, file:file.originalname};
+  
+    return this.postService.create(formatData, authorId)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -38,8 +42,9 @@ export class PostController {
     return this.postService.findOne(body);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Headers('Authorization') auth:string, @Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postService.update(id, updatePostDto);
   }
 
