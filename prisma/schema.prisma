@@ -14,11 +14,11 @@ model User {
   password String
   avatar   String?
 
-  post     Post[]
+  post     Publication[]
   comment  Comment[]
 }
 
-model Post {
+model Publication {
   id        String   @id @unique
   title     String
   content   String?
@@ -38,9 +38,8 @@ model Comment {
   createdAt DateTime @default(now()) @db.Timestamp(6)
 
   postId    String
-  post      Post   @relation(fields: [postId], references: [id])
+  post      Publication   @relation(fields: [postId], references: [id])
 
   authorId  String
   user      User    @relation(fields: [authorId], references: [id]) 
-
 }

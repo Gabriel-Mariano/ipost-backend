@@ -32,11 +32,12 @@ export class CommentsService {
     }
 
     const payload = {...createCommentDto, authorId:authorId };
-    console.log(payload)
 
     const comment = new Comment(payload);
+   
+    await this.prismaComment.execute(comment);
 
-    return 'This action adds a new comment';
+    return comment;
   }
 
   findAll() {

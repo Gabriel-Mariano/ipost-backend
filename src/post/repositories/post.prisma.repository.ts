@@ -10,7 +10,7 @@ export class PostsPrismaRepository implements PostsRepository{
     constructor(private prisma:PrismaClient){}
     
     async execute(createPostDto: Post): Promise<Post> {
-        const publication = await this.prisma.post.create({
+        const publication = await this.prisma.publication.create({
             data:createPostDto
         })
 
@@ -18,13 +18,13 @@ export class PostsPrismaRepository implements PostsRepository{
     }    
 
     async findAll(): Promise<Post[]> {
-        const publications = await this.prisma.post.findMany();
+        const publications = await this.prisma.publication.findMany();
         
         return publications;
     }
 
     async findById(id:string): Promise<Post> {
-        const publication = await this.prisma.post.findFirst({
+        const publication = await this.prisma.publication.findFirst({
             where:{
                 id
             }
@@ -34,7 +34,7 @@ export class PostsPrismaRepository implements PostsRepository{
     }
 
     async findByTitle(title:string): Promise<Post[]> {
-        const publication = await this.prisma.post.findMany({
+        const publication = await this.prisma.publication.findMany({
             where:{
                 title
             }, 
@@ -44,7 +44,7 @@ export class PostsPrismaRepository implements PostsRepository{
     }
 
     async updatePost(id: string, updatePostDto:UpdatePostDto): Promise<Post> {
-        const publicationUpdated = await this.prisma.post.update({
+        const publicationUpdated = await this.prisma.publication.update({
             where:{
                 id:id
             },
@@ -55,7 +55,7 @@ export class PostsPrismaRepository implements PostsRepository{
     }
 
     async removePost(id: string): Promise<Post> {
-        const publicationRemoved = await this.prisma.post.delete({
+        const publicationRemoved = await this.prisma.publication.delete({
             where:{
                 id
             }

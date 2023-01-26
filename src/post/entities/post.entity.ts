@@ -1,5 +1,4 @@
 import { randomUUID } from "crypto";
-import { User } from "src/users/entities/user.entity";
 
 export class Post {
     readonly id:string;

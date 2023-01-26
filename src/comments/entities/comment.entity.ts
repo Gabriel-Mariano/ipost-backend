@@ -7,9 +7,9 @@ export class Comment {
     createdAt?:Date;
 
     authorId:string;
-    postId:any;
+    postId:string;
 
-    constructor(props:Omit<Comment, 'id'>, id?:string ) {
+    constructor(props:Omit<Comment, 'id'>, id?:string) {
         this.comment = props.comment;
         this.createdAt = props.createdAt;
         this.authorId = props.authorId;
