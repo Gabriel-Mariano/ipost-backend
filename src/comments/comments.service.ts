@@ -34,7 +34,7 @@ export class CommentsService {
     const payload = {...createCommentDto, authorId:authorId };
 
     const comment = new Comment(payload);
-    console.log(comment)
+    
     await this.prismaComment.execute(comment);
 
     return comment;
@@ -58,8 +58,14 @@ export class CommentsService {
     }
 
     const comment = await this.prismaComment.findOne(id);
+    
+    if(comment.postId !== updateCommentDto.postId ) {
+      throw new HttpException({
+        message:`Você não tem permissão para fazer essa ação`
+      }, HttpStatus.UNAUTHORIZED)
+    }
 
-    if(!comment) {
+    if(!comment ) {
       throw new HttpException({
         message:`Nenhum comentário encontrado com este ${id}`
       }, HttpStatus.UNAUTHORIZED)
