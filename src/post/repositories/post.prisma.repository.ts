@@ -18,7 +18,25 @@ export class PostsPrismaRepository implements PostsRepository{
     }    
 
     async findAll(): Promise<Post[]> {
-        const publications = await this.prisma.publication.findMany();
+        const publications = await this.prisma.publication.findMany({
+            include:{
+                comment:{
+                    select:{
+                        id:true,
+                        comment:true,
+                        user:{
+                            select:{
+                                id:true,
+                                name:true,
+                                email:true
+                            }
+                        }
+                    },
+                    
+                    
+                }
+            }
+        });
         
         return publications;
     }
