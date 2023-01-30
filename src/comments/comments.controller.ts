@@ -14,6 +14,7 @@ export class CommentsController {
     return this.commentsService.create(createCommentDto, authorId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.commentsService.findAll();

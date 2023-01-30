@@ -40,8 +40,10 @@ export class CommentsService {
     return comment;
   }
 
-  findAll() {
-    return `This action returns all comments`;
+  async findAll() {
+    const comments = await this.prismaComment.findAll();
+    
+    return comments;
   }
 
   findOne(id: number) {

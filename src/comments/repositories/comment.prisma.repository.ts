@@ -34,6 +34,12 @@ export class CommentsPrismaRepository implements CommentsRepository {
         return comment;
     }
 
+    async findAll():Promise<Comment[]> {
+        const comments = await this.prisma.comment.findMany();
+
+        return comments;
+    }
+
     async updateComment(id: string, updateCommentDto:UpdateCommentDto): Promise<Comment> {
         const updatedComment = await this.prisma.comment.update({
             where:{
