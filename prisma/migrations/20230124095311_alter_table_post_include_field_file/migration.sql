@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `Post` ADD COLUMN `file` VARCHAR(191) NULL;
